@@ -312,7 +312,19 @@ def oyun_bitir():
 @app.route('/yeniden_oyna', methods=['POST'])
 def yeniden_oyna():
     """Oyunu yeniden başlat"""
-    return redirect(url_for('ana_sayfa'))
+    # Kullanıcı adını koru
+    player_name = session.get('player_name', '')
+    
+    # Ad kontrolü
+    if not player_name:
+        # Eğer ad yoksa ana sayfaya gönder
+        session['error_message'] = 'Lütfen adınızı girin!'
+        return redirect(url_for('ana_sayfa'))
+    
+    oyun.reset_game()
+    session['oyun_durumu'] = 'oynuyor'
+    session['player_name'] = player_name  # Adı tekrar kaydet
+    return redirect(url_for('oyun_sayfasi'))
 
 @app.route('/istatistikler')
 def istatistikler():
