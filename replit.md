@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a terminal-based educational math game designed for Turkish-speaking children. The game presents progressive difficulty math problems and tracks the player's score while providing an engaging, emoji-rich interface.
+This is a web-based educational math game designed for Turkish-speaking children. Originally a terminal application, it has been converted to a modern web interface using Flask. The game presents progressive difficulty math problems with time limits, tracks the player's score, and provides an engaging experience with sound effects, animations, and the Math Monster character.
 
 ## User Preferences
 
@@ -11,24 +11,26 @@ Preferred communication style: Simple, everyday language.
 ## System Architecture
 
 ### Application Type
-- **Platform**: Terminal/Console-based Python application
+- **Platform**: Web-based Python application using Flask
 - **Target Audience**: Turkish-speaking children
-- **Interface**: Command-line interface with Turkish text and emoji decorations
-- **Execution Model**: Single-threaded, interactive game loop
+- **Interface**: Modern web interface with responsive design, Turkish text, emoji decorations, animations, and sound effects
+- **Execution Model**: Client-server architecture with real-time gameplay
 
 ### Programming Language & Framework
-- **Language**: Python 3
-- **Dependencies**: Built-in Python standard library only (random, sys, os)
-- **Architecture Pattern**: Object-oriented design with single class structure
+- **Backend Language**: Python 3 with Flask web framework
+- **Frontend**: HTML5, CSS3, JavaScript (vanilla)
+- **Dependencies**: Flask for web server, session management
+- **Architecture Pattern**: MVC web application with object-oriented game logic
 
 ## Key Components
 
-### Core Game Class: `MatematikCanavari`
-- **Purpose**: Main game controller handling all game logic and user interaction
+### Core Game Class: `MatematikCanavariWeb`
+- **Purpose**: Main game controller handling all game logic and web interaction
 - **State Management**: 
-  - Player score tracking (`self.skor`)
-  - Difficulty progression (`self.zorluk_seviyesi`)
-  - Available math operations (`self.operasyonlar`)
+  - Player score tracking (via Flask sessions)
+  - Difficulty progression (session-based)
+  - Available math operations (session-based)
+  - Game state and timing controls
 
 ### Key Methods
 1. **Screen Management**: `temizle_ekran()` - Cross-platform screen clearing

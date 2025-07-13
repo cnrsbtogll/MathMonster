@@ -1,11 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script>
+// Oyun bitince ses efekti
+window.onload = function() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Dramatik ses efekti
+    const playDramaticSound = () => {
+        const frequencies = [150, 120, 100, 80];
+        frequencies.forEach((freq, index) => {
+            setTimeout(() => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = freq;
+                oscillator.type = 'sawtooth';
+                
+                gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            }, index * 200);
+        });
+    };
+    
+    playDramaticSound();
+};
+</script>
+<div class="math-monster">👹</div>
+
 <div class="emoji-border">💥💥💥💥💥💥💥💥💥💥</div>
 
-<h1>🎮 OYUN BİTTİ! 🎮</h1>
+<h1>🎮 MATEMATİK CANAVARI KAZANDI! 🎮</h1>
 
 <div class="emoji-border">💥💥💥💥💥💥💥💥💥💥</div>
+
+<div style="font-size: 1.2em; margin: 20px 0; font-style: italic;">
+    👹 "Hehe! Bu sefer ben kazandım! Ama çok iyi mücadele ettin!" 👹
+</div>
 
 <div class="game-over">
     <p style="font-size: 1.3em; margin-bottom: 20px;">

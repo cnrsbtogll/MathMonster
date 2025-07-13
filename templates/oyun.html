@@ -14,6 +14,10 @@
         </div>
         <div>📊 Seviye</div>
     </div>
+    <div class="score-item">
+        <div class="score-value" id="zaman" style="color: #ff6b6b;">30</div>
+        <div>⏰ Süre</div>
+    </div>
 </div>
 
 <div class="question-box" id="soru-kutusu">
@@ -55,6 +59,91 @@
 
 {% block scripts %}
 <script>
+// Ses efektleri
+const playSound = (type) => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    let frequency;
+    let duration;
+    
+    switch(type) {
+        case 'correct':
+            frequency = 800;
+            duration = 0.3;
+            break;
+        case 'wrong':
+            frequency = 200;
+            duration = 0.5;
+            break;
+        case 'tick':
+            frequency = 1000;
+            duration = 0.1;
+            break;
+        case 'timeup':
+            frequency = 150;
+            duration = 1;
+            break;
+    }
+    
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = frequency;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);
+};
+
+// Zaman sayacı
+let timeLeft = 30;
+let timerInterval;
+
+const startTimer = () => {
+    timeLeft = 30;
+    const timerElement = document.getElementById('zaman');
+    timerElement.textContent = timeLeft;
+    timerElement.classList.remove('timer-warning');
+    
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = timeLeft;
+        
+        if (timeLeft <= 10) {
+            timerElement.classList.add('timer-warning');
+            playSound('tick');
+        }
+        
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            playSound('timeup');
+            handleTimeUp();
+        }
+    }, 1000);
+};
+
+const stopTimer = () => {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+};
+
+const handleTimeUp = () => {
+    const mesajAlani = document.getElementById('mesaj-alani');
+    mesajAlani.innerHTML = '<div class="message error">⏰ Süre doldu! Oyun bitti!</div>';
+    
+    setTimeout(() => {
+        window.location.href = '/oyun_bitir';
+    }, 2000);
+};
+
+// Sayfa yüklendiğinde timer başlat
+startTimer();
 document.getElementById('cevap-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -89,11 +178,16 @@ document.getElementById('cevap-form').addEventListener('submit', function(e) {
             cevapInput.focus();
         } else if (data.dogru) {
             // Doğru cevap
-            mesajAlani.innerHTML = '<div class="message success">' + data.mesaj + '<br>🎁 +1 Puan! Toplam: ' + data.yeni_skor + '</div>';
+            playSound('correct');
+            mesajAlani.innerHTML = '<div class="message success celebration">' + data.mesaj + '<br>🎁 +1 Puan! Toplam: ' + data.yeni_skor + '</div>';
             
             // Skor ve seviye güncelle
             document.getElementById('skor').textContent = data.yeni_skor;
             document.getElementById('seviye').innerHTML = '<span id="zorluk-emoji">' + data.zorluk_emoji + '</span> ' + data.yeni_seviye;
+            
+            // Timer'ı yeniden başlat
+            stopTimer();
+            startTimer();
             
             // Yeni soruyu göster
             setTimeout(function() {
@@ -107,6 +201,8 @@ document.getElementById('cevap-form').addEventListener('submit', function(e) {
             
         } else {
             // Yanlış cevap - Oyun bitti
+            playSound('wrong');
+            stopTimer();
             mesajAlani.innerHTML = '<div class="message error">😔 Maalesef yanlış cevap...<br>✅ Doğru cevap: ' + data.dogru_cevap + '</div>';
             
             setTimeout(function() {
