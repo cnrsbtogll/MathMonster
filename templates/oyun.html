@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>🧮 MATEMATİK CANAVARI 🧮</h1>
+
+<div class="score-board">
+    <div class="score-item">
+        <div class="score-value" id="skor">{{ skor }}</div>
+        <div>🏆 Skor</div>
+    </div>
+    <div class="score-item">
+        <div class="score-value" id="seviye">
+            <span id="zorluk-emoji">{{ zorluk_emoji }}</span> {{ zorluk_seviyesi }}
+        </div>
+        <div>📊 Seviye</div>
+    </div>
+</div>
+
+<div class="question-box" id="soru-kutusu">
+    <div style="margin-bottom: 20px;">🤔 Soru:</div>
+    <div style="font-size: 1.2em;">
+        <span id="sayi1">{{ soru.sayi1 }}</span> 
+        <span id="operasyon">{{ soru.operasyon }}</span> 
+        <span id="sayi2">{{ soru.sayi2 }}</span> = ?
+    </div>
+</div>
+
+<div id="mesaj-alani"></div>
+
+<form id="cevap-form">
+    <div>
+        <input type="number" 
+               id="cevap-input" 
+               class="answer-input" 
+               placeholder="Cevabın?" 
+               required 
+               autofocus>
+    </div>
+    <button type="submit" class="btn">
+        💭 CEVAP VER! 💭
+    </button>
+</form>
+
+<div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Yeni soru hazırlanıyor...</p>
+</div>
+
+<div style="margin-top: 30px;">
+    <a href="{{ url_for('ana_sayfa') }}" class="btn" style="background: linear-gradient(45deg, #95a5a6, #7f8c8d);">
+        🏠 Ana Sayfa
+    </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('cevap-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const cevapInput = document.getElementById('cevap-input');
+    const cevap = cevapInput.value;
+    const loading = document.getElementById('loading');
+    const mesajAlani = document.getElementById('mesaj-alani');
+    
+    if (!cevap) {
+        return;
+    }
+    
+    // Loading göster
+    loading.style.display = 'block';
+    cevapInput.disabled = true;
+    
+    // Cevabı gönder
+    fetch('/cevap_kontrol', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'cevap=' + encodeURIComponent(cevap)
+    })
+    .then(response => response.json())
+    .then(data => {
+        loading.style.display = 'none';
+        cevapInput.disabled = false;
+        
+        if (data.hata) {
+            mesajAlani.innerHTML = '<div class="message error">' + data.mesaj + '</div>';
+            cevapInput.focus();
+        } else if (data.dogru) {
+            // Doğru cevap
+            mesajAlani.innerHTML = '<div class="message success">' + data.mesaj + '<br>🎁 +1 Puan! Toplam: ' + data.yeni_skor + '</div>';
+            
+            // Skor ve seviye güncelle
+            document.getElementById('skor').textContent = data.yeni_skor;
+            document.getElementById('seviye').innerHTML = '<span id="zorluk-emoji">' + data.zorluk_emoji + '</span> ' + data.yeni_seviye;
+            
+            // Yeni soruyu göster
+            setTimeout(function() {
+                document.getElementById('sayi1').textContent = data.yeni_soru.sayi1;
+                document.getElementById('operasyon').textContent = data.yeni_soru.operasyon;
+                document.getElementById('sayi2').textContent = data.yeni_soru.sayi2;
+                cevapInput.value = '';
+                cevapInput.focus();
+                mesajAlani.innerHTML = '<div class="message success">⏳ Yeni soru hazır! Devam et! 🚀</div>';
+            }, 2000);
+            
+        } else {
+            // Yanlış cevap - Oyun bitti
+            mesajAlani.innerHTML = '<div class="message error">😔 Maalesef yanlış cevap...<br>✅ Doğru cevap: ' + data.dogru_cevap + '</div>';
+            
+            setTimeout(function() {
+                window.location.href = '/oyun_bitir';
+            }, 3000);
+        }
+    })
+    .catch(error => {
+        loading.style.display = 'none';
+        cevapInput.disabled = false;
+        mesajAlani.innerHTML = '<div class="message error">❌ Bir hata oluştu! Lütfen tekrar dene.</div>';
+        console.error('Error:', error);
+    });
+});
+
+// Enter tuşuna basıldığında form gönder
+document.getElementById('cevap-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.getElementById('cevap-form').dispatchEvent(new Event('submit'));
+    }
+});
+</script>
+{% endblock %}

@@ -13,24 +13,17 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Math Game"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "matematik_canavari_test"
+args = "Web Math Game"
 
 [[workflows.workflow]]
-name = "Math Game"
+name = "Web Math Game"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python3 matematik_canavari.py"
+args = "python app.py"
+waitForPort = 5000
 
-[[workflows.workflow]]
-name = "matematik_canavari_test"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python matematik_canavari.py"
+[[ports]]
+localPort = 5000
+externalPort = 80

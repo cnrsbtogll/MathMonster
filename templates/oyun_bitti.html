@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="emoji-border">💥💥💥💥💥💥💥💥💥💥</div>
+
+<h1>🎮 OYUN BİTTİ! 🎮</h1>
+
+<div class="emoji-border">💥💥💥💥💥💥💥💥💥💥</div>
+
+<div class="game-over">
+    <p style="font-size: 1.3em; margin-bottom: 20px;">
+        😔 Maalesef yanlış cevap verdin...
+    </p>
+    
+    <div class="emoji-border">🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆</div>
+    
+    <div class="final-score">
+        🎊 {{ final_skor }} 🎊
+    </div>
+    
+    <p style="font-size: 1.1em; margin-bottom: 20px;">FINAL SKOR</p>
+    
+    <div class="emoji-border">🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆</div>
+</div>
+
+<div style="margin: 30px 0; font-size: 1.2em;">
+    {% if final_skor == 0 %}
+        🌱 Başlangıç güzel! Bir daha dene! 💪
+    {% elif final_skor <= 5 %}
+        🌟 İyi bir başlangıç! Daha da iyisini yapabilirsin! 🚀
+    {% elif final_skor <= 10 %}
+        ✨ Harika! Sen gerçek bir matematik yıldızısın! ⭐
+    {% elif final_skor <= 20 %}
+        🔥 İnanılmaz! Sen bir matematik dâhisisin! 🧠
+    {% else %}
+        👑 EFSANE! Sen matematik kralısın! 🦄
+    {% endif %}
+</div>
+
+<div style="margin: 40px 0;">
+    <form action="{{ url_for('yeniden_oyna') }}" method="POST" style="display: inline;">
+        <button type="submit" class="btn btn-success">
+            🔄 YENİDEN OYNA! 🔄
+        </button>
+    </form>
+    
+    <a href="{{ url_for('ana_sayfa') }}" class="btn" style="background: linear-gradient(45deg, #95a5a6, #7f8c8d);">
+        🏠 Ana Sayfa
+    </a>
+</div>
+
+<div style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
+    🌈 Teşekkürler! Tekrar görüşmek üzere! 🌈
+</div>
+{% endblock %}
