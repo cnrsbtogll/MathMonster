@@ -34,34 +34,26 @@ window.onload = function() {
 </script>
 <div class="math-monster">👹</div>
 
-<div class="emoji-border">💥💥💥💥💥💥💥💥💥💥</div>
+<h1 style="font-size: 1.6em; margin: 15px 0; color: #ff6b6b;">🎮 MATEMATİK CANAVARI KAZANDI! 🎮</h1>
 
-<h1>🎮 MATEMATİK CANAVARI KAZANDI! 🎮</h1>
-
-<div class="emoji-border">💥💥💥💥💥💥💥💥💥💥</div>
-
-<div style="font-size: 1.2em; margin: 20px 0; font-style: italic;">
+<div style="font-size: 1em; margin: 15px 0; font-style: italic;">
     👹 "Hehe! Bu sefer ben kazandım! Ama çok iyi mücadele ettin!" 👹
 </div>
 
 <div class="game-over">
-    <p style="font-size: 1.3em; margin-bottom: 20px;">
+    <p style="font-size: 1.1em; margin-bottom: 15px;">
         😔 Maalesef yanlış cevap verdin...
     </p>
     
-    <div class="emoji-border">🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆</div>
-    
-    <div class="final-score">
+    <div class="final-score" style="font-size: 2em; margin: 20px 0;">
         🎊 {{ final_skor }} 🎊
     </div>
     
-    <p style="font-size: 1.1em; margin-bottom: 20px;">FINAL SKOR</p>
-    
-    <div class="emoji-border">🏆🏆🏆🏆🏆🏆🏆🏆🏆🏆</div>
+    <p style="font-size: 1em; margin-bottom: 15px;">FINAL SKOR</p>
 </div>
 
-<div style="margin: 30px 0; font-size: 1.2em;">
-    <p style="margin-bottom: 15px;">🎭 {{ player_name }} için sonuçlar:</p>
+<div style="margin: 20px 0; font-size: 1em;">
+    <p style="margin-bottom: 10px;">🎭 {{ player_name }} için sonuçlar:</p>
     
     {% if final_skor == 0 %}
         🌱 Başlangıç güzel! Bir daha dene! 💪
@@ -77,42 +69,42 @@ window.onload = function() {
 </div>
 
 {% if player_stats %}
-<div class="rules">
-    <h3 style="text-align: center; margin-bottom: 20px;">📈 Kişisel İstatistiklerin</h3>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
-        <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-            <div style="font-size: 1.5em; font-weight: bold; color: #f39c12;">{{ player_stats.best_score }}</div>
-            <div style="font-size: 0.9em;">🏆 En İyi Skor</div>
+<div class="rules" style="margin: 20px 0;">
+    <h3 style="text-align: center; margin-bottom: 15px; font-size: 1.1em;">📈 Kişisel İstatistiklerin</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+        <div style="text-align: center; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <div style="font-size: 1.2em; font-weight: bold; color: #f39c12;">{{ player_stats.best_score }}</div>
+            <div style="font-size: 0.8em;">🏆 En İyi Skor</div>
         </div>
-        <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-            <div style="font-size: 1.5em; font-weight: bold; color: #27ae60;">{{ player_stats.total_games_played }}</div>
-            <div style="font-size: 0.9em;">🎮 Toplam Oyun</div>
+        <div style="text-align: center; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <div style="font-size: 1.2em; font-weight: bold; color: #27ae60;">{{ player_stats.total_games_played }}</div>
+            <div style="font-size: 0.8em;">🎮 Toplam Oyun</div>
         </div>
-        <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-            <div style="font-size: 1.5em; font-weight: bold; color: #3498db;">%{{ player_stats.calculate_accuracy() }}</div>
-            <div style="font-size: 0.9em;">🎯 Doğruluk</div>
+        <div style="text-align: center; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <div style="font-size: 1.2em; font-weight: bold; color: #3498db;">%{{ player_stats.calculate_accuracy() }}</div>
+            <div style="font-size: 0.8em;">🎯 Doğruluk</div>
         </div>
-        <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
-            <div style="font-size: 1.5em; font-weight: bold; color: #9b59b6;">{{ player_stats.highest_level_reached }}</div>
-            <div style="font-size: 0.9em;">🌟 En Yüksek Seviye</div>
+        <div style="text-align: center; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <div style="font-size: 1.2em; font-weight: bold; color: #9b59b6;">{{ player_stats.highest_level_reached }}</div>
+            <div style="font-size: 0.8em;">🌟 En Yüksek Seviye</div>
         </div>
     </div>
 </div>
 {% endif %}
 
-<div style="margin: 40px 0;">
+<div style="margin: 25px 0;">
     <form action="{{ url_for('yeniden_oyna') }}" method="POST" style="display: inline;">
-        <button type="submit" class="btn btn-success">
+        <button type="submit" class="btn btn-success" style="margin: 5px;">
             🔄 YENİDEN OYNA! 🔄
         </button>
     </form>
     
-    <a href="{{ url_for('ana_sayfa') }}" class="btn" style="background: linear-gradient(45deg, #95a5a6, #7f8c8d);">
+    <a href="{{ url_for('ana_sayfa') }}" class="btn" style="background: linear-gradient(45deg, #95a5a6, #7f8c8d); margin: 5px;">
         🏠 Ana Sayfa
     </a>
 </div>
 
-<div style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
+<div style="margin-top: 20px; font-size: 0.8em; opacity: 0.8;">
     🌈 Teşekkürler! Tekrar görüşmek üzere! 🌈
 </div>
 {% endblock %}
