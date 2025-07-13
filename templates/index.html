@@ -1,34 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="emoji-border">🎮🎮🎮🎮🎮🎮🎮🎮🎮🎮</div>
+<h1 style="font-size: 1.8em; margin: 15px 0;">🧮 MATEMATİK CANAVARI 🧮</h1>
 
-<h1>🧮 MATEMATİK CANAVARI 🧮</h1>
-
-<div class="emoji-border">🎮🎮🎮🎮🎮🎮🎮🎮🎮🎮</div>
-
-<p style="font-size: 1.3em; margin: 25px 0;">
+<p style="font-size: 1.1em; margin: 15px 0;">
     🌟 Merhaba küçük matematik yıldızı! 🌟
 </p>
 
-<div style="margin: 30px 0;">
-    <p style="font-size: 1.2em; margin-bottom: 20px;">🚀 Hazır mısın?</p>
+<div style="margin: 20px 0;">
+    <p style="font-size: 1.1em; margin-bottom: 15px;">🚀 Hazır mısın?</p>
     
     {% if error_message %}
-    <div class="message error" style="margin: 20px 0;">
+    <div class="message error" style="margin: 15px 0;">
         {{ error_message }}
     </div>
     {% endif %}
     
     <form action="{{ url_for('oyun_basla') }}" method="POST" id="oyun-form">
-        <div style="margin: 20px 0;">
+        <div style="margin: 15px 0;">
             <input type="text" 
                    name="player_name" 
                    id="player-name"
                    class="answer-input" 
                    placeholder="Adını yaz (zorunlu)" 
                    maxlength="20"
-                   style="width: 250px;"
+                   style="width: 100%; max-width: 250px;"
                    required>
         </div>
         <button type="submit" class="btn btn-success">
@@ -37,14 +33,9 @@
     </form>
 </div>
 
-<p style="font-size: 1.1em; margin: 20px 0;">
-    🦄 Matematik canavarı ile birlikte eğlenceli<br>
-    matematik soruları çözeceğiz! 🎯
-</p>
-
-<div class="rules">
-    <h3 style="text-align: center; margin-bottom: 20px;">📝 KURALLAR:</h3>
-    <ul>
+<div class="rules" style="margin: 20px 0;">
+    <h3 style="text-align: center; margin-bottom: 15px; font-size: 1.1em;">📝 KURALLAR:</h3>
+    <ul style="font-size: 0.9em;">
         <li>✅ Her doğru cevap = 1 puan</li>
         <li>📈 Her doğru cevapla sorular zorlaşır</li>
         <li>❌ Yanlış cevap = Oyun biter</li>
@@ -64,18 +55,18 @@ document.getElementById('oyun-form').addEventListener('submit', function(e) {
 </script>
 
 {% if top_scores %}
-<div class="rules">
-    <h3 style="text-align: center; margin-bottom: 20px;">🏆 EN İYİ SKORLAR</h3>
+<div class="rules" style="margin: 20px 0;">
+    <h3 style="text-align: center; margin-bottom: 15px; font-size: 1.1em;">🏆 EN İYİ SKORLAR</h3>
     <ul style="list-style: none; padding: 0;">
         {% for score in top_scores %}
-        <li style="display: flex; justify-content: space-between; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+        <li style="display: flex; justify-content: space-between; margin: 8px 0; padding: 8px; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.9em;">
             <span>{{ loop.index }}. {{ score.player_name }}</span>
             <span>{{ score.final_score }} puan</span>
         </li>
         {% endfor %}
     </ul>
     <div style="text-align: center; margin-top: 15px;">
-        <a href="{{ url_for('istatistikler') }}" class="btn" style="font-size: 0.9em; padding: 10px 20px;">
+        <a href="{{ url_for('istatistikler') }}" class="btn" style="font-size: 0.8em; padding: 8px 16px;">
             📊 Tüm İstatistikler
         </a>
     </div>
