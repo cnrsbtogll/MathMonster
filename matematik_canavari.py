@@ -34,8 +34,8 @@ class MatematikCanavari:
         print("   📈 Her doğru cevapla sorular zorlaşır")
         print("   ❌ Yanlış cevap = Oyun biter")
         print()
-        print("🚀 Hazır mısın? Enter'a bas!")
-        input()
+        print("🚀 Oyun başlıyor...")
+        print()
         self.temizle_ekran()
     
     def sayi_uret(self):
@@ -136,7 +136,11 @@ class MatematikCanavari:
             try:
                 # Kullanıcıdan cevap al
                 print("💭 Cevabın nedir? ", end="")
-                kullanici_cevap = int(input())
+                try:
+                    kullanici_cevap = int(input())
+                except EOFError:
+                    print("\n👋 Oyun sonlandırıldı!")
+                    sys.exit(0)
                 print()
                 
                 # Cevabı kontrol et
@@ -148,7 +152,10 @@ class MatematikCanavari:
                     print(f"🎁 +1 Puan! Toplam: {self.skor}")
                     print()
                     print("⏳ Bir sonraki soru geliyor...")
-                    input("📱 Enter'a bas!")
+                    try:
+                        input("📱 Enter'a bas!")
+                    except EOFError:
+                        pass
                     self.temizle_ekran()
                 else:
                     # Yanlış cevap - Oyun bitti
@@ -205,7 +212,7 @@ class MatematikCanavari:
                 self.oyun_basla()
             else:
                 print("\n👋 Hoşçakal! Tekrar görüşmek üzere! 🌈")
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, EOFError):
             print("\n\n👋 Görüşürüz! 🌟")
 
 def main():
