@@ -4,6 +4,16 @@
 
 This is a web-based educational math game designed for Turkish-speaking children. Originally a terminal application, it has been converted to a modern web interface using Flask. The game presents progressive difficulty math problems with time limits, tracks the player's score, and provides an engaging experience with sound effects, animations, and the Math Monster character.
 
+## Recent Changes
+
+**July 13, 2025 - Database Integration Added:**
+- Added PostgreSQL database with Flask-SQLAlchemy
+- Implemented player statistics tracking with GameScore and PlayerStats models
+- Added leaderboard system showing top scores on main page
+- Created statistics page with detailed player analytics
+- Added player name input system for personalized gameplay
+- Integrated game result saving with accuracy tracking and play time recording
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.

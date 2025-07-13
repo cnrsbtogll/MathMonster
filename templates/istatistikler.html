@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}İstatistikler - Matematik Canavarı{% endblock %}
+
+{% block content %}
+<h1>📊 İSTATİSTİKLER 📊</h1>
+
+<div style="margin: 30px 0;">
+    <a href="{{ url_for('ana_sayfa') }}" class="btn" style="background: linear-gradient(45deg, #95a5a6, #7f8c8d);">
+        🏠 Ana Sayfa
+    </a>
+</div>
+
+<div class="score-board">
+    <div class="score-item">
+        <div class="score-value">{{ total_games }}</div>
+        <div>🎮 Toplam Oyun</div>
+    </div>
+    <div class="score-item">
+        <div class="score-value">{{ total_players }}</div>
+        <div>👥 Toplam Oyuncu</div>
+    </div>
+    <div class="score-item">
+        <div class="score-value">{{ avg_score }}</div>
+        <div>📈 Ortalama Skor</div>
+    </div>
+</div>
+
+<div class="rules">
+    <h3 style="text-align: center; margin-bottom: 20px;">🏆 EN İYİ SKORLAR</h3>
+    {% if top_scores %}
+    <ul style="list-style: none; padding: 0;">
+        {% for score in top_scores %}
+        <li style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <div>
+                <span style="font-size: 1.2em; font-weight: bold;">{{ loop.index }}. {{ score.player_name }}</span>
+                <div style="font-size: 0.9em; opacity: 0.8;">
+                    Seviye {{ score.max_level_reached }} • {{ score.total_questions_answered }} soru
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 1.3em; font-weight: bold; color: #f39c12;">{{ score.final_score }} puan</div>
+                <div style="font-size: 0.8em; opacity: 0.7;">{{ score.created_at.strftime('%d.%m.%Y') }}</div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p style="text-align: center; font-style: italic;">Henüz oyun oynamamış!</p>
+    {% endif %}
+</div>
+
+<div class="rules">
+    <h3 style="text-align: center; margin-bottom: 20px;">👑 EN AKTİF OYUNCULAR</h3>
+    {% if top_players %}
+    <ul style="list-style: none; padding: 0;">
+        {% for player in top_players %}
+        <li style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <div>
+                <span style="font-size: 1.2em; font-weight: bold;">{{ loop.index }}. {{ player.player_name }}</span>
+                <div style="font-size: 0.9em; opacity: 0.8;">
+                    En yüksek skor: {{ player.best_score }} • Doğruluk: %{{ player.calculate_accuracy() }}
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 1.3em; font-weight: bold; color: #27ae60;">{{ player.total_games_played }} oyun</div>
+                <div style="font-size: 0.8em; opacity: 0.7;">Ort: {{ player.calculate_average_score() }}</div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p style="text-align: center; font-style: italic;">Henüz oyuncu yok!</p>
+    {% endif %}
+</div>
+
+<div style="margin: 30px 0; text-align: center;">
+    <a href="{{ url_for('ana_sayfa') }}" class="btn btn-success">
+        🎮 Oyun Oyna!
+    </a>
+</div>
+{% endblock %}

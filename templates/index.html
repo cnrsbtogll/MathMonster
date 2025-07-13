@@ -30,11 +30,38 @@
     <p style="font-size: 1.2em; margin-bottom: 20px;">🚀 Hazır mısın?</p>
     
     <form action="{{ url_for('oyun_basla') }}" method="POST">
+        <div style="margin: 20px 0;">
+            <input type="text" 
+                   name="player_name" 
+                   class="answer-input" 
+                   placeholder="Adını yaz" 
+                   maxlength="20"
+                   style="width: 250px;">
+        </div>
         <button type="submit" class="btn btn-success">
             🎮 OYUNU BAŞLAT! 🎮
         </button>
     </form>
 </div>
+
+{% if top_scores %}
+<div class="rules">
+    <h3 style="text-align: center; margin-bottom: 20px;">🏆 EN İYİ SKORLAR</h3>
+    <ul style="list-style: none; padding: 0;">
+        {% for score in top_scores %}
+        <li style="display: flex; justify-content: space-between; margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <span>{{ loop.index }}. {{ score.player_name }}</span>
+            <span>{{ score.final_score }} puan</span>
+        </li>
+        {% endfor %}
+    </ul>
+    <div style="text-align: center; margin-top: 15px;">
+        <a href="{{ url_for('istatistikler') }}" class="btn" style="font-size: 0.9em; padding: 10px 20px;">
+            📊 Tüm İstatistikler
+        </a>
+    </div>
+</div>
+{% endif %}
 
 <div style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
     🌈 Eğlenceli matematik macerası seni bekliyor! 🌈

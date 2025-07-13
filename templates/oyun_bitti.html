@@ -61,6 +61,8 @@ window.onload = function() {
 </div>
 
 <div style="margin: 30px 0; font-size: 1.2em;">
+    <p style="margin-bottom: 15px;">🎭 {{ player_name }} için sonuçlar:</p>
+    
     {% if final_skor == 0 %}
         🌱 Başlangıç güzel! Bir daha dene! 💪
     {% elif final_skor <= 5 %}
@@ -73,6 +75,30 @@ window.onload = function() {
         👑 EFSANE! Sen matematik kralısın! 🦄
     {% endif %}
 </div>
+
+{% if player_stats %}
+<div class="rules">
+    <h3 style="text-align: center; margin-bottom: 20px;">📈 Kişisel İstatistiklerin</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+        <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <div style="font-size: 1.5em; font-weight: bold; color: #f39c12;">{{ player_stats.best_score }}</div>
+            <div style="font-size: 0.9em;">🏆 En İyi Skor</div>
+        </div>
+        <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <div style="font-size: 1.5em; font-weight: bold; color: #27ae60;">{{ player_stats.total_games_played }}</div>
+            <div style="font-size: 0.9em;">🎮 Toplam Oyun</div>
+        </div>
+        <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <div style="font-size: 1.5em; font-weight: bold; color: #3498db;">%{{ player_stats.calculate_accuracy() }}</div>
+            <div style="font-size: 0.9em;">🎯 Doğruluk</div>
+        </div>
+        <div style="text-align: center; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+            <div style="font-size: 1.5em; font-weight: bold; color: #9b59b6;">{{ player_stats.highest_level_reached }}</div>
+            <div style="font-size: 0.9em;">🌟 En Yüksek Seviye</div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <div style="margin: 40px 0;">
     <form action="{{ url_for('yeniden_oyna') }}" method="POST" style="display: inline;">
