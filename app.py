@@ -15,8 +15,12 @@ from models import db, GameScore, PlayerStats
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'matematik_canavari_secret_key_2024')
 
-# Veritabanı konfigürasyonu
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+# Veritabanı konfigürasyonu - Vercel uyumlu
+database_url = os.environ.get('DATABASE_URL')
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url or "sqlite:///matematik_canavari.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 300,
@@ -25,6 +29,15 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 
 # Veritabanını başlat
 db.init_app(app)
+
+# Vercel için hata yakalama
+@app.errorhandler(500)
+def internal_error(error):
+    return f"Internal Server Error: {str(error)}", 500
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return f"Application Error: {str(e)}", 500
 
 class MatematikCanavariWeb:
     def __init__(self):
@@ -372,9 +385,27 @@ def player_stats_api(player_name):
     else:
         return jsonify({'error': 'Player not found'}), 404
 
+# Vercel için uyumluluk
+def create_tables():
+    """Veritabanı tablolarını oluştur"""
+    try:
+        with app.app_context():
+            db.create_all()
+            print("Veritabanı tabloları başarıyla oluşturuldu")
+    except Exception as e:
+        print(f"Veritabanı hatası: {e}")
+        # SQLite fallback için
+        if not database_url:
+            print("SQLite veritabanı kullanılıyor")
+
+# Uygulama başlatıldığında tabloları oluştur
+try:
+    create_tables()
+except Exception as e:
+    print(f"Tablo oluşturma hatası: {e}")
+
+# Vercel için app instance'ı export et
+application = app
+
 if __name__ == '__main__':
-    with app.app_context():
-        # Veritabanı tablolarını oluştur
-        db.create_all()
-    
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
