@@ -29,20 +29,39 @@
 <div style="margin: 30px 0;">
     <p style="font-size: 1.2em; margin-bottom: 20px;">🚀 Hazır mısın?</p>
     
-    <form action="{{ url_for('oyun_basla') }}" method="POST">
+    {% if error_message %}
+    <div class="message error" style="margin: 20px 0;">
+        {{ error_message }}
+    </div>
+    {% endif %}
+    
+    <form action="{{ url_for('oyun_basla') }}" method="POST" id="oyun-form">
         <div style="margin: 20px 0;">
             <input type="text" 
                    name="player_name" 
+                   id="player-name"
                    class="answer-input" 
-                   placeholder="Adını yaz" 
+                   placeholder="Adını yaz (zorunlu)" 
                    maxlength="20"
-                   style="width: 250px;">
+                   style="width: 250px;"
+                   required>
         </div>
         <button type="submit" class="btn btn-success">
             🎮 OYUNU BAŞLAT! 🎮
         </button>
     </form>
 </div>
+
+<script>
+document.getElementById('oyun-form').addEventListener('submit', function(e) {
+    const playerName = document.getElementById('player-name').value.trim();
+    if (!playerName) {
+        e.preventDefault();
+        alert('Lütfen adınızı girin!');
+        document.getElementById('player-name').focus();
+    }
+});
+</script>
 
 {% if top_scores %}
 <div class="rules">

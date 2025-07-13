@@ -181,15 +181,35 @@ def ana_sayfa():
     if 'skor' not in session:
         oyun.reset_game()
     
-    # En iyi skorları getir
-    top_scores = GameScore.query.order_by(GameScore.final_score.desc()).limit(5).all()
+    # En iyi skorları getir (her kullanıcının en yüksek skoru)
+    subquery = db.session.query(
+        GameScore.player_name,
+        db.func.max(GameScore.final_score).label('max_score')
+    ).group_by(GameScore.player_name).subquery()
     
-    return render_template('index.html', top_scores=top_scores)
+    top_scores = db.session.query(GameScore).join(
+        subquery,
+        db.and_(
+            GameScore.player_name == subquery.c.player_name,
+            GameScore.final_score == subquery.c.max_score
+        )
+    ).order_by(GameScore.final_score.desc()).limit(5).all()
+    
+    # Hata mesajını al ve temizle
+    error_message = session.pop('error_message', None)
+    
+    return render_template('index.html', top_scores=top_scores, error_message=error_message)
 
 @app.route('/oyun_basla', methods=['POST'])
 def oyun_basla():
     """Oyunu başlat"""
-    player_name = request.form.get('player_name', 'Misafir')
+    player_name = request.form.get('player_name', '').strip()
+    
+    # Ad kontrolü
+    if not player_name:
+        # Ana sayfaya geri dön hata mesajı ile
+        session['error_message'] = 'Lütfen adınızı girin!'
+        return redirect(url_for('ana_sayfa'))
     
     oyun.reset_game()
     session['oyun_durumu'] = 'oynuyor'
@@ -297,8 +317,19 @@ def yeniden_oyna():
 @app.route('/istatistikler')
 def istatistikler():
     """İstatistikler sayfası"""
-    # En iyi skorlar
-    top_scores = GameScore.query.order_by(GameScore.final_score.desc()).limit(10).all()
+    # En iyi skorlar (her kullanıcının en yüksek skoru)
+    subquery = db.session.query(
+        GameScore.player_name,
+        db.func.max(GameScore.final_score).label('max_score')
+    ).group_by(GameScore.player_name).subquery()
+    
+    top_scores = db.session.query(GameScore).join(
+        subquery,
+        db.and_(
+            GameScore.player_name == subquery.c.player_name,
+            GameScore.final_score == subquery.c.max_score
+        )
+    ).order_by(GameScore.final_score.desc()).limit(10).all()
     
     # En aktif oyuncular
     top_players = PlayerStats.query.order_by(PlayerStats.total_games_played.desc()).limit(10).all()
