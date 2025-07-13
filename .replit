@@ -1,0 +1,36 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Math Game"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "matematik_canavari_test"
+
+[[workflows.workflow]]
+name = "Math Game"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python3 matematik_canavari.py"
+
+[[workflows.workflow]]
+name = "matematik_canavari_test"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python matematik_canavari.py"
