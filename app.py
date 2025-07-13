@@ -132,7 +132,7 @@ class MatematikCanavariWeb:
             
             db.session.add(game_score)
             
-            # Oyuncu istatistiklerini güncelle
+            # Oyuncu istatistiklerini güncelle veya oluştur
             player_stats = PlayerStats.query.filter_by(player_name=player_name).first()
             
             if not player_stats:
@@ -164,10 +164,13 @@ class MatematikCanavariWeb:
                     player_stats.highest_level_reached = max_level
             
             db.session.commit()
+            print(f"Oyun kaydedildi: {player_name} - Skor: {final_score}")
             
         except Exception as e:
             print(f"Veritabanı hatası: {e}")
             db.session.rollback()
+            # Hata olsa bile session'ı temizle
+            return
 
 # Global oyun instance
 oyun = MatematikCanavariWeb()
